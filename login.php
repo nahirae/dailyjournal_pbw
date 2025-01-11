@@ -12,6 +12,7 @@
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST['user'];
+    $password = $_POST['pass'];
     
     //menggunakan fungsi enkripsi md5 supaya sama dengan password  yang tersimpan di database
     $password = md5($_POST['pass']);
@@ -43,6 +44,7 @@
     } else {
         //jika tidak ada (gagal), alihkan kembali ke halaman login
         header("location:login.php");
+        $error = "Username atau Password salah!";
     }
 
         //menutup koneksi database
@@ -91,6 +93,12 @@
                         <button class="btn btn-danger rounded-4">Login</button>
                         </div>
                     </form>
+                    <!-- Error Message -->
+                    <?php if (isset($error)): ?>
+                        <div class="alert alert-danger text-center mt-3 rounded-4">
+                            <?php echo $error; ?>
+                        </div>
+                    <?php endif; ?>
                     </div>
                 </div>
             </div>

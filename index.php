@@ -106,39 +106,37 @@ include "koneksi.php";
     
     <!-- gallery -->
     <section id="gallery" class="text-center p-5 bg-danger-subtle">
-        <div class="container">
-            <h1 class="fw-bold display-4">Gallery</h1> <br>
-            <div id="carouselExample" class="carousel slide d-flex justify-content-center">
-                <div class="carousel-inner" style="width: 50%;">
-                  <div class="carousel-item active">
-                    <img src="https://i.pinimg.com/564x/c5/5a/dd/c55add0f33ff22440682f119d571de84.jpg" class="d-block w-100" alt="hogwarts life">
-                  </div>
-                  <div class="carousel-item">
-                    <img src="https://i.pinimg.com/564x/19/81/cd/1981cd32d2af5ed0fdb77bc3da5d3f5e.jpg" class="d-block w-100" alt="hogwarts life">
-                  </div>
-                  <div class="carousel-item">
-                    <img src="https://i.pinimg.com/564x/e9/89/26/e98926953e2515737a2c2c3656dcb904.jpg" class="d-block w-100" alt="hogwarts life">
-                  </div>
-                  <div class="carousel-item">
-                    <img src="img\hogwarts life.png" class="d-block w-100" alt="hogwarts life">
-                  </div>
-                  <div class="carousel-item">
-                    <img src="https://i.pinimg.com/564x/9e/78/25/9e78255cf8d837e82468e55618c15648.jpg" class="d-block w-100" alt="hogwarts life">
-                  </div>
-                </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
-                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                  <span class="visually-hidden">Previous</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
-                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                  <span class="visually-hidden">Next</span>
-                </button>
-            </div>
-        </div>
+      <div class="container">
+          <h1 class="fw-bold display-4 pb-3">Gallery</h1>
+          <div class="d-flex justify-content-center align-items-center">
+              <!-- Tombol navigasi kiri -->
+              <button class="btn btn-light me-3" id="prev-btn" style="cursor: pointer;">
+                <span class="fs-4">&#8249;</span>
+              </button>
+
+              <!-- Tempat untuk gambar gallery -->
+              <div class="gallery-display">
+                  <?php
+                  $sql = "SELECT * FROM gallery ORDER BY tanggal DESC";
+                  $hasil = $conn->query($sql);
+
+                  while ($row = $hasil->fetch_assoc()) {
+                  ?>
+                      <img src="img/<?= $row['gambar'] ?>" class="gallery-img d-none d-block w-100" alt="Gallery Image" >
+                  <?php
+                  }
+                  ?>
+              </div> <!--style="max-width: 700px; max-height: 500px;"-->
+
+              <!-- Tombol navigasi kanan -->
+              <button class="btn btn-light ms-3" id="next-btn" style="cursor: pointer;">
+                <span class="fs-4">&#8250;</span>
+              </button>
+          </div>
+      </div>
     </section>
 
-    <!-- article -->
+    <!-- Schedule -->
     <section id="schedule" class="text-center p-5">
       <div class="container">
           <h1 class="fw-bold display-5">Schedule</h1> <br>
@@ -346,6 +344,36 @@ include "koneksi.php";
 
       // Sembunyikan tombol "light" saat mode default terang
       toggleLight.style.display = "none";
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const images = document.querySelectorAll(".gallery-img");
+            let currentIndex = 0;
+
+            // Tampilkan gambar pertama
+            if (images.length > 0) {
+                images[currentIndex].classList.remove("d-none");
+            }
+
+            // Fungsi untuk navigasi ke gambar berikutnya
+            document.getElementById("next-btn").addEventListener("click", function () {
+                if (images.length > 0) {
+                    images[currentIndex].classList.add("d-none"); // Sembunyikan gambar sekarang
+                    currentIndex = (currentIndex + 1) % images.length; // Perpindahan indeks
+                    images[currentIndex].classList.remove("d-none"); // Tampilkan gambar baru
+                }
+            });
+
+            // Fungsi untuk navigasi ke gambar sebelumnya
+            document.getElementById("prev-btn").addEventListener("click", function () {
+                if (images.length > 0) {
+                    images[currentIndex].classList.add("d-none"); // Sembunyikan gambar sekarang
+                    currentIndex = (currentIndex - 1 + images.length) % images.length; // Perpindahan indeks
+                    images[currentIndex].classList.remove("d-none"); // Tampilkan gambar baru
+                }
+            });
+        });
     </script>
   </body>
 </html>
